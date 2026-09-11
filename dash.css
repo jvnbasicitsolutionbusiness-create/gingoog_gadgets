@@ -41,6 +41,10 @@ body {
     color: white;
     padding: 26px 16px;
     box-shadow: 8px 0 28px rgba(15, 35, 61, 0.08);
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
 }
 
 .sidebar-logo {
@@ -89,6 +93,7 @@ body {
     max-width: 1600px;
     min-width: 0;
     padding: 38px clamp(20px, 4vw, 52px);
+    margin-left: 250px;
 }
 
 .main>h1 {
@@ -108,13 +113,13 @@ body {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
 }
 
 .dashboard-table-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 22px;
     margin-top: 26px;
 }
@@ -123,6 +128,8 @@ body {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .report-actions button {
@@ -144,7 +151,7 @@ body {
 
 .report-summary {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
 }
 
@@ -152,6 +159,8 @@ body {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .log-actions button {
@@ -184,7 +193,7 @@ body {
 
 .card p {
     color: var(--ink);
-    font-size: 32px;
+    font-size: clamp(24px, 5vw, 32px);
     font-weight: bold;
     margin-top: 12px;
 }
@@ -201,7 +210,7 @@ body {
 .product-form h2,
 .table-section h2 {
     color: var(--ink);
-    font-size: 19px;
+    font-size: clamp(16px, 2vw, 19px);
     letter-spacing: -0.2px;
 }
 
@@ -213,6 +222,8 @@ body {
     outline: none;
     padding: 12px;
     margin-top: 10px;
+    font-size: 16px;
+    min-height: 44px;
 }
 
 .product-form select {
@@ -223,6 +234,8 @@ body {
     outline: none;
     padding: 12px;
     margin-top: 10px;
+    font-size: 16px;
+    min-height: 44px;
 }
 
 .product-form input:focus,
@@ -234,11 +247,13 @@ body {
 .product-form label {
     display: block;
     margin-top: 15px;
+    font-weight: 500;
 }
 
 .stock-form label {
     display: block;
     margin-top: 15px;
+    font-weight: 500;
 }
 
 .product-form button {
@@ -251,6 +266,8 @@ body {
     margin-top: 15px;
     padding: 11px 20px;
     transition: background 0.2s, transform 0.2s;
+    min-height: 44px;
+    font-size: 16px;
 }
 
 .product-form button:hover,
@@ -271,13 +288,14 @@ body {
     box-shadow: var(--shadow);
     margin-top: 26px;
     padding: 24px;
+    overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 18px;
-    min-width: 560px;
+    min-width: 100%;
 }
 
 table th,
@@ -287,26 +305,43 @@ table td {
     border-left: 0;
     border-right: 0;
     border-top: 0;
-    padding: 14px 12px;
+    padding: clamp(8px, 2vw, 14px);
+    font-size: clamp(12px, 1.5vw, 14px);
 }
 
 table th {
-    background: #2563eb;
     background: #eaf2fc;
     color: #315477;
-    font-size: 12px;
+    font-size: clamp(11px, 1.2vw, 12px);
     letter-spacing: 0.4px;
     text-transform: uppercase;
+    font-weight: 600;
 }
 
 table tbody tr:hover {
     background: #f7fbff;
 }
 
+/* Tablet screens (900px and below) */
+@media (max-width: 1200px) {
+    .main {
+        padding: 30px clamp(16px, 3vw, 40px);
+    }
+    
+    .cards {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    
+    .dashboard-table-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 900px) {
     body {
         display: block;
     }
+    
     .menu-toggle {
         align-items: center;
         background: #1e293b;
@@ -324,6 +359,7 @@ table tbody tr:hover {
         width: 44px;
         z-index: 1100;
     }
+    
     .menu-toggle span {
         background: white;
         border-radius: 2px;
@@ -331,6 +367,7 @@ table tbody tr:hover {
         height: 2px;
         width: 21px;
     }
+    
     .menu-backdrop.visible {
         background: rgba(15, 23, 42, 0.45);
         display: block;
@@ -338,6 +375,7 @@ table tbody tr:hover {
         position: fixed;
         z-index: 900;
     }
+    
     .sidebar {
         height: 100vh;
         left: 0;
@@ -350,109 +388,264 @@ table tbody tr:hover {
         width: min(280px, 86vw);
         z-index: 1000;
     }
+    
     .sidebar.open {
         transform: translateX(0);
     }
+    
     .sidebar-logo {
         height: 58px;
         margin: 0 auto 8px;
         width: 58px;
     }
+    
     .sidebar h2 {
         font-size: 20px;
         margin-bottom: 14px;
         text-align: center;
     }
+    
     .sidebar ul {
         display: block;
     }
+    
     .sidebar ul li {
         padding: 10px 12px;
         font-size: 13px;
         min-height: 44px;
     }
+    
     .main {
+        margin-left: 0;
         padding: 76px 20px 24px;
     }
+    
     .main>h1 {
-        font-size: 28px;
+        font-size: clamp(24px, 5vw, 28px);
         margin-bottom: 20px;
     }
+    
     .cards {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
     }
+    
     .dashboard-table-grid,
     .report-summary {
         grid-template-columns: 1fr;
     }
+    
     .table-section {
         overflow-x: auto;
+        padding: 16px;
+    }
+    
+    table {
+        min-width: 500px;
+    }
+    
+    .product-form,
+    .card {
+        padding: 16px;
+    }
+    
+    .card p {
+        font-size: clamp(20px, 4vw, 24px);
     }
 }
 
+/* Mobile screens (560px and below) */
 @media (max-width: 560px) {
     .sidebar {
         padding: 14px 12px;
+        width: 100vw;
     }
+    
     .main {
         padding: 72px 12px 20px;
     }
+    
     .main>h1 {
-        font-size: 24px;
+        font-size: clamp(20px, 4vw, 24px);
+        margin-bottom: 16px;
     }
+    
     .cards {
         grid-template-columns: 1fr;
         gap: 12px;
     }
+    
     .card,
     .product-form,
     .table-section {
         padding: 16px;
     }
-    .card p {
-        font-size: 24px;
+    
+    .card h3 {
+        font-size: 12px;
     }
+    
+    .card p {
+        font-size: 22px;
+    }
+    
     .product-form button,
     .report-actions button,
     .log-actions button {
         width: 100%;
         min-height: 44px;
+        padding: 12px 16px;
+        font-size: 14px;
     }
+    
     .product-form input,
-    .product-form select {
-        min-height: 46px;
+    .product-form select,
+    .stock-form input,
+    .stock-form select {
+        min-height: 44px;
         font-size: 16px;
+        margin-top: 8px;
     }
+    
     .product-form .cancel-button {
         margin-left: 0;
+        margin-top: 10px;
     }
+    
     .report-actions,
     .log-actions {
-        display: block;
+        display: flex;
+        flex-direction: column;
     }
+    
+    .report-summary {
+        grid-template-columns: 1fr;
+    }
+    
     .options {
         align-items: flex-start;
         flex-direction: column;
         gap: 10px;
     }
+    
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        white-space: normal;
+    }
+    
     .action-buttons button {
         padding: 8px 10px;
-        min-height: 42px;
+        min-height: 40px;
+        font-size: 12px;
+        flex: 1;
+        min-width: 70px;
+    }
+    
+    table {
+        min-width: 100%;
+        font-size: 12px;
+    }
+    
+    table th,
+    table td {
+        padding: 8px 6px;
+    }
+    
+    .table-section {
+        padding: 12px;
+    }
+    
+    .product-form h2,
+    .table-section h2 {
+        font-size: 16px;
+    }
+}
+
+/* Small mobile screens (below 400px) */
+@media (max-width: 400px) {
+    .main {
+        padding: 68px 8px 16px;
+    }
+    
+    .main>h1 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+    
+    .card,
+    .product-form,
+    .table-section {
+        padding: 12px;
+        margin-top: 16px;
+    }
+    
+    .card h3 {
+        font-size: 11px;
+    }
+    
+    .card p {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+    
+    .product-form input,
+    .product-form select {
+        padding: 10px;
+        margin-top: 6px;
+    }
+    
+    .product-form label {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    
+    .product-form button,
+    .report-actions button,
+    .log-actions button {
+        padding: 10px 12px;
+        font-size: 13px;
+        margin-top: 10px;
+    }
+    
+    .menu-toggle {
+        width: 40px;
+        height: 40px;
+        right: 12px;
+        top: 12px;
+    }
+    
+    .menu-toggle span {
+        width: 18px;
+    }
+    
+    table {
+        font-size: 11px;
+    }
+    
+    table th,
+    table td {
+        padding: 6px 4px;
     }
 }
 
 .empty-table {
     color: #64748b;
     text-align: center;
+    padding: 20px;
 }
 
 .section-note {
     color: #64748b;
     margin-top: 8px;
+    font-size: 14px;
 }
 
 .action-buttons {
-    white-space: nowrap;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .action-buttons button {
@@ -461,8 +654,10 @@ table tbody tr:hover {
     color: white;
     cursor: pointer;
     font-weight: bold;
-    padding: 7px 12px;
+    padding: 8px 12px;
     transition: background 0.2s, transform 0.2s;
+    font-size: 13px;
+    min-height: 36px;
 }
 
 .edit-button {
@@ -471,7 +666,6 @@ table tbody tr:hover {
 
 .delete-button {
     background: #c2413a;
-    margin-left: 6px;
 }
 
 .restock-button {
@@ -481,32 +675,39 @@ table tbody tr:hover {
     color: white;
     cursor: pointer;
     font-weight: bold;
-    padding: 7px 12px;
+    padding: 8px 12px;
     transition: background 0.2s, transform 0.2s;
+    font-size: 13px;
 }
 
 .edit-button:hover,
+.delete-button:hover,
 .restock-button:hover {
     background: #087b68;
     transform: translateY(-1px);
 }
 
-.delete-button:hover,
-.log-actions button:hover {
+.delete-button:hover {
     background: #a9322c;
 }
 
 @media print {
     .sidebar,
-    .report-actions {
+    .report-actions,
+    .menu-toggle,
+    .menu-backdrop {
         display: none;
     }
+    
     .main {
         padding: 0;
+        margin-left: 0;
     }
+    
     .page-section {
         display: none;
     }
+    
     #reportsPage {
         display: block;
     }
