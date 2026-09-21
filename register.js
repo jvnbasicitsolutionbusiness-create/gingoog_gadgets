@@ -1,3 +1,8 @@
+// 1. Initialize EmailJS (Ilisi ang 'YOUR_PUBLIC_KEY' gikan sa EmailJS Dashboard)
+(function () {
+    emailjs.init("YOUR_PUBLIC_KEY");
+})();
+
 let generatedOTP = "";
 let tempUserData = {};
 
@@ -20,7 +25,7 @@ if (showBtn) {
     });
 }
 
-// Step 1: Register Form Submission (Check passwords & send OTP)
+// Step 1: Register Form Submission (Check passwords & send OTP via EmailJS)
 document.getElementById('registerForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -41,20 +46,34 @@ document.getElementById('registerForm').addEventListener('submit', function (e) 
     generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
     tempUserData = { username, email, password };
 
+    // Print OTP sa Browser Console (F12) para sa madaling testing
+    console.log("-------------------------------------");
+    console.log("YOUR GENERATED OTP CODE IS:", generatedOTP);
+    console.log("-------------------------------------");
+
     msg.style.color = "#216bd1";
     msg.textContent = "Sending OTP code to " + email + "...";
 
-    // Simulate sending OTP to Gmail
-    setTimeout(() => {
+    // Pag-send og tinuod nga email gamit ang EmailJS API
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+        to_name: username,
+        to_email: email,
+        otp_code: generatedOTP
+    })
+    .then(function () {
         msg.style.color = "green";
-        msg.textContent = "OTP code sent to your Gmail!";
+        msg.textContent = "OTP code successfully sent to your Gmail!";
 
         // Switch UI to OTP Form
         document.getElementById('registerForm').style.display = 'none';
         document.getElementById('otpForm').style.display = 'block';
         document.getElementById('pageTitle').textContent = "OTP Verification";
-        document.getElementById('pageSubtitle').textContent = "Please check your Gmail code";
-    }, 1000);
+        document.getElementById('pageSubtitle').textContent = "Please check your Gmail inbox";
+    }, function (error) {
+        msg.style.color = "red";
+        msg.textContent = "Failed to send email. Please check your EmailJS Keys or internet connection.";
+        console.error("EmailJS Error details:", error);
+    });
 });
 
 // Step 2: OTP Verification
