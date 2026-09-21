@@ -54,7 +54,7 @@ body {
 }
 
 
-/* Login Box */
+/* Login / Register Box */
 
 .login-box {
     width: 100%;
@@ -145,7 +145,7 @@ h1 {
 }
 
 
-/* Password */
+/* Password Box */
 
 .password-box {
     position: relative;
@@ -169,7 +169,17 @@ h1 {
 }
 
 
-/* Options */
+/* OTP Specific Input Styling */
+
+.otp-input {
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 18px !important;
+    font-weight: bold;
+}
+
+
+/* Options & Links */
 
 .options {
     display: flex;
@@ -189,6 +199,7 @@ h1 {
 .options a {
     color: #216bd1;
     text-decoration: none;
+    font-weight: 600;
 }
 
 .options a:hover {
@@ -196,7 +207,7 @@ h1 {
 }
 
 
-/* Login Button */
+/* Action Buttons */
 
 .login-btn {
     width: 100%;
@@ -222,7 +233,7 @@ h1 {
 }
 
 
-/* Message */
+/* Feedback Message */
 
 #message {
     text-align: center;
@@ -230,6 +241,7 @@ h1 {
     line-height: 1.4;
     min-height: 18px;
     margin-top: 15px;
+    font-weight: 600;
 }
 
 
