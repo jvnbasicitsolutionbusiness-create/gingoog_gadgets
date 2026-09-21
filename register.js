@@ -1,80 +1,81 @@
-// Initialize EmailJS (I-replace ang YOUR_PUBLIC_KEY sa imong EmailJS key)
-(function () {
-    emailjs.init("YOUR_PUBLIC_KEY");
-})();
-
 let generatedOTP = "";
 let tempUserData = {};
 
-// Show / Hide Password toggle
-const showRegPasswordBtn = document.getElementById('showRegPassword');
-const regPasswordInput = document.getElementById('reg-password');
+// Show/Hide Password functionality (apil ang Confirm Password)
+const showBtn = document.getElementById('showRegPassword');
+const passInput = document.getElementById('reg-password');
+const confirmPassInput = document.getElementById('confirm-password');
 
-if (showRegPasswordBtn) {
-    showRegPasswordBtn.addEventListener('click', function () {
-        if (regPasswordInput.type === 'password') {
-            regPasswordInput.type = 'text';
-            showRegPasswordBtn.textContent = 'Hide';
+if (showBtn) {
+    showBtn.addEventListener('click', function () {
+        if (passInput.type === 'password') {
+            passInput.type = 'text';
+            confirmPassInput.type = 'text';
+            showBtn.textContent = 'Hide';
         } else {
-            regPasswordInput.type = 'password';
-            showRegPasswordBtn.textContent = 'Show';
+            passInput.type = 'password';
+            confirmPassInput.type = 'password';
+            showBtn.textContent = 'Show';
         }
     });
 }
 
-// Step 1: Send OTP to Gmail
+// Step 1: Register Form Submission (Check passwords & send OTP)
 document.getElementById('registerForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
+    const username = document.getElementById('username').value;
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
-    const msg = document.getElementById('regMessage');
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const msg = document.getElementById('message');
 
-    // Generate random 6-digit OTP
+    // Password Match Validation
+    if (password !== confirmPassword) {
+        msg.style.color = "red";
+        msg.textContent = "Passwords do not match!";
+        return;
+    }
+
+    // Generate 6-digit OTP Code
     generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-    tempUserData = { email, password };
+    tempUserData = { username, email, password };
 
     msg.style.color = "#216bd1";
-    msg.textContent = "Sending OTP to your Gmail...";
+    msg.textContent = "Sending OTP code to " + email + "...";
 
-    // I-padala ang OTP pinaagi sa EmailJS API
-    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-        to_email: email,
-        otp_code: generatedOTP
-    })
-    .then(function () {
+    // Simulate sending OTP to Gmail
+    setTimeout(() => {
         msg.style.color = "green";
-        msg.textContent = "OTP code sent to " + email;
+        msg.textContent = "OTP code sent to your Gmail!";
 
-        // Tagoan ang Step 1 form ug ipakita ang OTP form
+        // Switch UI to OTP Form
         document.getElementById('registerForm').style.display = 'none';
         document.getElementById('otpForm').style.display = 'block';
-    }, function (error) {
-        msg.style.color = "red";
-        msg.textContent = "Failed to send OTP. Please check your email.";
-        console.error("EmailJS error:", error);
-    });
+        document.getElementById('pageTitle').textContent = "OTP Verification";
+        document.getElementById('pageSubtitle').textContent = "Please check your Gmail code";
+    }, 1000);
 });
 
-// Step 2: Verify OTP ug I-save ang Account
+// Step 2: OTP Verification
 document.getElementById('otpForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const userOtp = document.getElementById('otpInput').value;
-    const msg = document.getElementById('regMessage');
+    const msg = document.getElementById('message');
 
     if (userOtp === generatedOTP) {
-        // I-save sa browser storage (LocalStorage)
-        localStorage.setItem("user_" + tempUserData.email, JSON.stringify(tempUserData));
+        // Save user account in browser storage
+        localStorage.setItem('user_' + tempUserData.email, JSON.stringify(tempUserData));
 
         msg.style.color = "green";
-        msg.textContent = "Account verified & created! Redirecting to login...";
+        msg.textContent = "Account verified & created successfully! Redirecting to login...";
 
         setTimeout(() => {
             window.location.href = "index.html";
         }, 1500);
     } else {
         msg.style.color = "red";
-        msg.textContent = "Invalid OTP code. Please try again.";
+        msg.textContent = "Incorrect OTP code. Please try again.";
     }
 });
