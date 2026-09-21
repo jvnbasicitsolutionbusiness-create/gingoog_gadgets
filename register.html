@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Inventory - Create Account</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- EmailJS SDK (Kinahanglanon para mag-send ug OTP sa Gmail) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 
 <body>
@@ -60,7 +63,7 @@
 
                 <div class="input-group">
                     <label for="otpInput">Enter OTP Code (Gmail)</label>
-                    <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6" required style="text-align: center; letter-spacing: 3px; font-weight: bold;">
+                    <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6" class="otp-input" required>
                 </div>
 
                 <button type="submit" class="login-btn">
