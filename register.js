@@ -1,7 +1,5 @@
-// EmailJS configuration
-// 1) Create your EmailJS account and Gmail service
-// 2) Replace the placeholder values below with your real EmailJS keys
-// 3) Make sure the template variables match the keys used in emailjs.send(...)
+// EmailJS setup
+// If you do not have EmailJS yet, the app will still work in demo mode by showing the OTP in the console and on the screen.
 const EMAILJS_CONFIG = {
     publicKey: 'YOUR_PUBLIC_KEY',
     serviceId: 'YOUR_SERVICE_ID',
@@ -18,8 +16,6 @@ const hasEmailJsConfig =
 
 if (typeof emailjs !== 'undefined' && hasEmailJsConfig) {
     emailjs.init(EMAILJS_CONFIG.publicKey);
-} else if (typeof emailjs !== 'undefined') {
-    console.warn('EmailJS is not configured yet. Add your real public/service/template keys in register.js.');
 }
 
 let generatedOTP = "";
@@ -51,7 +47,7 @@ function showMessage(message, color = '#216bd1') {
     msg.textContent = message;
 }
 
-// Step 1: Register Form Submission (Check passwords & send OTP via EmailJS)
+// Step 1: Register Form Submission
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
     registerForm.addEventListener('submit', function (e) {
@@ -89,15 +85,26 @@ if (registerForm) {
         console.log('YOUR GENERATED OTP CODE IS:', generatedOTP);
         console.log('-------------------------------------');
 
-        showMessage('Sending OTP code to ' + email + '...');
-
         if (!hasEmailJsConfig) {
-            showMessage('EmailJS is not configured yet. Please add your real EmailJS keys in register.js.', 'red');
-            console.error('EmailJS configuration missing. Replace YOUR_PUBLIC_KEY, YOUR_SERVICE_ID, and YOUR_TEMPLATE_ID with real values.');
+            showMessage('Demo mode: OTP generated successfully. Check the console or use the OTP displayed below.', '#216bd1');
+
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('otpForm').style.display = 'block';
+            document.getElementById('pageTitle').textContent = 'OTP Verification';
+            document.getElementById('pageSubtitle').textContent = 'Demo mode - your OTP is shown below';
+
+            const otpInput = document.getElementById('otpInput');
+            if (otpInput) {
+                otpInput.value = generatedOTP;
+                otpInput.focus();
+                otpInput.select();
+            }
+
             return;
         }
 
-        // Send real email with EmailJS API
+        showMessage('Sending OTP code to ' + email + '...');
+
         emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
             to_name: username,
             to_email: email,
@@ -106,14 +113,26 @@ if (registerForm) {
         .then(function () {
             showMessage('OTP code successfully sent to your Gmail!', 'green');
 
-            // Switch UI to OTP Form
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('otpForm').style.display = 'block';
             document.getElementById('pageTitle').textContent = 'OTP Verification';
             document.getElementById('pageSubtitle').textContent = 'Please check your Gmail inbox';
         }, function (error) {
-            showMessage('Failed to send email. Please check your EmailJS keys, template, or internet connection.', 'red');
+            showMessage('Failed to send OTP. Demo mode activated. Check the console for the OTP code.', '#216bd1');
             console.error('EmailJS Error details:', error);
+            console.log('Fallback OTP:', generatedOTP);
+
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('otpForm').style.display = 'block';
+            document.getElementById('pageTitle').textContent = 'OTP Verification';
+            document.getElementById('pageSubtitle').textContent = 'Fallback demo mode';
+
+            const otpInput = document.getElementById('otpInput');
+            if (otpInput) {
+                otpInput.value = generatedOTP;
+                otpInput.focus();
+                otpInput.select();
+            }
         });
     });
 }
